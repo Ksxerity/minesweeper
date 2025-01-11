@@ -1,60 +1,18 @@
-# create-svelte
+# Minesweeper
 
-Everything you need to build a Svelte library, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/main/packages/create-svelte).
+A simple recreation of Minesweeper to test out new technologies like Svelte.
 
-Read more about creating a library [in the docs](https://svelte.dev/docs/kit/packaging).
+Tech Stack: Svelte 5, Tailwind CSS, Shadcn-svelte
 
-## Creating a project
+Node version: 22.13.0
 
-If you're seeing this, you've probably already done this step. Congrats!
+## Demo photo
 
-```bash
-# create a new project in the current directory
-npx sv create
+![Demo](./Demo.JPG)
 
-# create a new project in my-app
-npx sv create my-app
-```
+## Interesting problems encountered during development
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-Everything inside `src/lib` is part of your library, everything inside `src/routes` can be used as a showcase or preview app.
-
-## Building
-
-To build your library:
-
-```bash
-npm run package
-```
-
-To create a production version of your showcase app:
-
-```bash
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
-
-## Publishing
-
-Go into the `package.json` and give your package the desired name through the `"name"` option. Also consider adding a `"license"` field and point it to a `LICENSE` file which you can create from a template (one popular option is the [MIT license](https://opensource.org/license/mit/)).
-
-To publish your library to [npm](https://www.npmjs.com):
-
-```bash
-npm publish
-```
+Vite's hmr will not work if VScode is opened in Windows, but the code is ran using WSL.
+Decided to work with the recommended solution on Vite's website.
 
 https://v3.vitejs.dev/config/server-options.html#server-watch
