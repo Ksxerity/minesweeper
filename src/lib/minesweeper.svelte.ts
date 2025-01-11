@@ -1,11 +1,11 @@
 export default class Minesweeper implements App.Minesweeper{
-    numberOfRows: number;
-    numberOfColumns: number;
-    mineField!: (number | 'X')[][];
-	  viewField!: (number | 'F')[][];
-    NUMBER_OF_MINES!: number;
-    flags!: number;
-    numberOfUnopenedTiles!: number;
+    numberOfRows: number = $state(0);
+    numberOfColumns: number = $state(0);
+    mineField: (number | 'X')[][] = $state([]); // Grid for mine positions and number indicators that show how many mines are in the area
+	  viewField: (number | 'F')[][] = $state([]); // Grid for keeping track of flags and what tiles should be revealed
+    NUMBER_OF_MINES: number = $state(0);
+    flags: number = $state(0);
+    numberOfUnopenedTiles: number = $state(0);
 
     constructor(rows: number, columns: number) {
       this.numberOfRows = rows;
@@ -40,8 +40,8 @@ export default class Minesweeper implements App.Minesweeper{
         randomizedArray[y] = temp;
       }
       for (let i = 0; i < this.NUMBER_OF_MINES; i++) {
-        let row = Math.floor(randomizedArray[i] / 10);
-        let col = randomizedArray[i] % 10;
+        let row = Math.floor(randomizedArray[i] / this.numberOfRows);
+        let col = randomizedArray[i] % this.numberOfColumns;
         this.mineField[row][col] = 'X';
         if (row !== 0) {
           // Update above count
@@ -131,7 +131,7 @@ export default class Minesweeper implements App.Minesweeper{
       return 1;
     }
   
-    handleClick = (row: number, col: number) => {
+    handleClosedTileClick = (row: number, col: number) => {
       if (this.mineField[row][col] === 'X') {
         this.viewField[row][col] = 1;
         return -1;
@@ -157,5 +157,85 @@ export default class Minesweeper implements App.Minesweeper{
         return this.checkSolution();
       }
       return 0;
+    }
+
+    handleOpenTileClick = (row: number, col: number) => {
+      let flags = 0;
+      const nonFlagCoordinate = [];
+      if (row !== 0) {
+        // Update above count
+        if (this.viewField[row - 1][col] === 'F') {
+          flags += 1;
+        } else {
+          nonFlagCoordinate.push([row - 1, col])
+        }
+      }
+      if (row !== this.numberOfRows - 1) {
+        // Update below count
+        if (this.viewField[row + 1][col] === 'F') {
+          flags += 1;
+        } else {
+          nonFlagCoordinate.push([row + 1, col])
+        }
+      }
+      if (col !== 0) {
+        // Update left count
+        if (this.viewField[row][col - 1] === 'F') {
+          flags += 1;
+        } else {
+          nonFlagCoordinate.push([row, col - 1])
+        }
+      }
+      if (col !== this.numberOfColumns - 1) {
+        // Update right count
+        if (this.viewField[row][col + 1] === 'F') {
+          flags += 1;
+        } else {
+          nonFlagCoordinate.push([row, col + 1])
+        }
+      }
+      if (row !== 0 && col !== 0) {
+        // Update top-left count
+        if (this.viewField[row - 1][col - 1] === 'F') {
+          flags += 1;
+        } else {
+          nonFlagCoordinate.push([row - 1, col - 1])
+        }
+      }
+      if (row !== 0 && col !== this.numberOfColumns - 1) {
+        // Update top-right count
+        if (this.viewField[row - 1][col + 1] === 'F') {
+          flags += 1;
+        } else {
+          nonFlagCoordinate.push([row - 1, col + 1])
+        }
+      }
+      if (row !== this.numberOfRows - 1 && col !== 0) {
+        // Update bottom-left count
+        if (this.viewField[row + 1][col - 1] === 'F') {
+          flags += 1;
+        } else {
+          nonFlagCoordinate.push([row + 1, col - 1])
+        }
+      }
+      if (row !== this.numberOfRows - 1 && col !== this.numberOfColumns - 1) {
+        // Update bottom-right count
+        if (this.viewField[row + 1][col + 1] === 'F') {
+          flags += 1;
+        } else {
+          nonFlagCoordinate.push([row + 1, col + 1])
+        }
+      }
+      if (flags === this.mineField[row][col]) {
+        let lost = false;
+        nonFlagCoordinate.forEach((coord) => {
+          if (this.mineField[coord[0]][coord[1]] === 'X') {
+            lost = true;
+          }
+          this.viewField[coord[0]][coord[1]] = 1;
+        })
+        return lost ? -1 : 1
+      }
+      return 1;
     }
   }

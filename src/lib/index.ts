@@ -1,4 +1,9 @@
 // Reexport your entry components here
-import Minesweeper from "./minesweeper.ts";
+import Minesweeper from "./minesweeper.svelte.ts";
+import { cn, flyAndScale } from "./utils.ts";
 
-export {Minesweeper}
+export {
+    Minesweeper,
+    cn,
+    flyAndScale
+}
